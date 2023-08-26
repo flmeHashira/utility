@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            max-width: 90%;
+            width: 320px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #007BFF;
+        }
+
+        .section {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            padding: 10px 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .result {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Converter</h1>
+
+        <div class="section">
+            <div class="input-group">
+                <label for="binaryInput">Binary to Decimal:</label>
+                <input type="text" id="binaryInput" placeholder="Enter binary number">
+                <p class="result">Decimal: <span id="decimalOutput"></span></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="input-group">
+                <label for="decimalInput">Decimal to Binary:</label>
+                <input type="text" id="decimalInput" placeholder="Enter decimal number">
+                <p class="result">Binary: <span id="binaryOutput"></span></p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="input-group">
+                <label for="alphabetInput">Alphabet to Number:</label>
+                <input type="text" id="alphabetInput" placeholder="Enter words">
+                <p class="result">Number(s): <span id="numberOutput"></span></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="input-group">
+                <label for="alphabetInput">A bitwise B:</label>
+                <!-- <label for="number1Input">Number 1:</label> -->
+                <input type="text" id="number1Input" placeholder="Enter number 1">
+            </div>
+            <div class="input-group">
+                <!-- <label for="number2Input">Number 2:</label> -->
+                <input type="text" id="number2Input" placeholder="Enter number 2">
+            </div>
+            <p class="result">AND: <span id="bitwiseAndOutput"></span></p>
+            <p class="result">OR: <span id="bitwiseOrOutput"></span></p>
+        </div>
+    </div>
+
+    <script>
+        const binaryInput = document.getElementById("binaryInput");
+        const decimalInput = document.getElementById("decimalInput");
+        const alphabetInput = document.getElementById("alphabetInput");
+        const decimalOutput = document.getElementById("decimalOutput");
+        const binaryOutput = document.getElementById("binaryOutput");
+        const numberOutput = document.getElementById("numberOutput");
+        const number1Input = document.getElementById("number1Input");
+        const number2Input = document.getElementById("number2Input");
+        const bitwiseAndOutput = document.getElementById("bitwiseAndOutput");
+        const bitwiseOrOutput = document.getElementById("bitwiseOrOutput"); // Added this line
+
+        // Function to calculate and display the bitwise AND and OR results in real-time
+        function calculateBitwiseResults() {
+            const number1 = parseInt(number1Input.value);
+            const number2 = parseInt(number2Input.value);
+
+            if (!isNaN(number1) && !isNaN(number2)) {
+                const andResult = number1 & number2;
+                const orResult = number1 | number2; // Calculate the bitwise OR
+                bitwiseAndOutput.innerText = andResult;
+                bitwiseOrOutput.innerText = orResult; // Display the bitwise OR result
+            } else {
+                bitwiseAndOutput.innerText = "";
+                bitwiseOrOutput.innerText = ""; // Clear the OR result if inputs are not valid numbers
+            }
+        }
+
+        // Add input event listeners to both input fields to trigger the calculation
+        number1Input.addEventListener("input", calculateBitwiseResults);
+        number2Input.addEventListener("input", calculateBitwiseResults);
+
+
+        binaryInput.addEventListener("input", () => {
+            const binaryValue = binaryInput.value;
+            const decimalValue = parseInt(binaryValue, 2);
+            decimalOutput.innerText = isNaN(decimalValue) ? "" : decimalValue;
+        });
+
+        decimalInput.addEventListener("input", () => {
+            const decimalValue = parseInt(decimalInput.value);
+            const binaryValue = (decimalValue >>> 0).toString(2);
+            binaryOutput.innerText = isNaN(decimalValue) ? "" : binaryValue;
+        });
+
+        alphabetInput.addEventListener("input", () => {
+            const alphabetValue = alphabetInput.value.toUpperCase();
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let numberValue = "";
+
+            let isColorBlue = true;
+
+            for (let i = 0; i < alphabetValue.length; i++) {
+                const char = alphabetValue[i];
+                if (char === ' ') {
+                    isColorBlue = !isColorBlue; // Flip the color flag when a space is encountered
+                    numberValue += ' '; // Add a space for each number
+                }
+
+                const index = alphabet.indexOf(char);
+                if (index !== -1) {
+                    const backgroundColor = isColorBlue ? "#007BFF" : "#ff6600";
+                    numberValue += `<span style="background-color: ${backgroundColor}; color: white; padding: 2px;">${index + 1}</span>`;
+                }
+            }
+
+            numberOutput.innerHTML = numberValue;
+        });
+    </script>
+    
+    
+</body>
+</html>
