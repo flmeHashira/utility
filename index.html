@@ -100,6 +100,7 @@
             </div>
             <p class="result">AND: <span id="bitwiseAndOutput"></span></p>
             <p class="result">OR: <span id="bitwiseOrOutput"></span></p>
+            <p class="result">XOR: <span id="bitwiseXorOutput"></span></p>
         </div>
     </div>
 
@@ -113,7 +114,8 @@
         const number1Input = document.getElementById("number1Input");
         const number2Input = document.getElementById("number2Input");
         const bitwiseAndOutput = document.getElementById("bitwiseAndOutput");
-        const bitwiseOrOutput = document.getElementById("bitwiseOrOutput"); // Added this line
+        const bitwiseOrOutput = document.getElementById("bitwiseOrOutput");
+        const bitwiseXorOutput = document.getElementById("bitwiseXorOutput");
 
         // Function to calculate and display the bitwise AND and OR results in real-time
         function calculateBitwiseResults() {
@@ -125,9 +127,11 @@
                 const orResult = number1 | number2; // Calculate the bitwise OR
                 bitwiseAndOutput.innerText = andResult;
                 bitwiseOrOutput.innerText = orResult; // Display the bitwise OR result
+                bitwiseXorOutput.innerText = number1^number2;
             } else {
                 bitwiseAndOutput.innerText = "";
-                bitwiseOrOutput.innerText = ""; // Clear the OR result if inputs are not valid numbers
+                bitwiseOrOutput.innerText = "";
+                bitwiseXorOutput.innerText = "";
             }
         }
 
