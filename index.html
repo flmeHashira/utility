@@ -58,6 +58,26 @@
             font-weight: bold;
             margin-top: 15px;
         }
+
+        #operatorToggle {
+            /* padding: 10px; */
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top:5px;
+            padding-bottom: 5px;
+            font-size: 1.2em;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #operatorToggle:hover {
+            background-color: #0056b3;
+        }
+        
     </style>
 </head>
 <body>
@@ -102,7 +122,54 @@
             <p class="result">OR: <span id="bitwiseOrOutput"></span></p>
             <p class="result">XOR: <span id="bitwiseXorOutput"></span></p>
         </div>
+
+         <!-- New Fraction Section -->
+        <!-- <div class="section fraction-section">
+            <div class="input-group">
+                <label for="numerator1">Fraction 1 Numerator:</label>
+                <input type="text" id="numerator1" placeholder="Enter numerator">
+            </div>
+            <div class="input-group">
+                <label for="denominator1">Fraction 1 Denominator:</label>
+                <input type="text" id="denominator1" placeholder="Enter denominator">
+            </div>
+
+            <div class="input-group">
+                <label for="operator">Operator (+ / -):</label>
+                <input type="text" id="operator" placeholder="Enter + or -">
+            </div>
+
+            <div class="input-group">
+                <label for="numerator2">Fraction 2 Numerator:</label>
+                <input type="text" id="numerator2" placeholder="Enter numerator">
+            </div>
+            <div class="input-group">
+                <label for="denominator2">Fraction 2 Denominator:</label>
+                <input type="text" id="denominator2" placeholder="Enter denominator">
+            </div>
+
+            <button onclick="calculateFractionResult()">Calculate</button>
+
+            <p class="result">Result: <span id="fractionOutput"></span></p>
+        </div> -->
+         <!-- New Fraction Section -->
+        <div class="section fraction-section">
+            <div class="input-group">
+                <label for="fractionInput1">Fraction 1:</label>
+                <input type="text" id="fractionInput1" placeholder="Enter fraction (e.g., 3/4)">
+            </div>
+
+            <button id="operatorToggle" onclick="toggleOperator()">+</button>
+
+            <div class="input-group">
+                <label for="fractionInput2">Fraction 2:</label>
+                <input type="text" id="fractionInput2" placeholder="Enter fraction (e.g., 1/2)">
+            </div>
+
+            <p class="result">Result: <span id="fractionOutput"></span></p>
+        </div>
     </div>
+
 
     <script>
         const binaryInput = document.getElementById("binaryInput");
@@ -175,8 +242,51 @@
 
             numberOutput.innerHTML = numberValue;
         });
+
+        let isAddition = true;
+
+        function toggleOperator() {
+            const operatorToggle = document.getElementById("operatorToggle");
+            isAddition = !isAddition;
+            operatorToggle.innerText = isAddition ? '+' : '-';
+            calculateFractionResult();
+        }
+
+        function simplifyFraction(numerator, denominator) {
+            const gcd = findGCD(numerator, denominator);
+            const simplifiedNumerator = numerator / gcd;
+            const simplifiedDenominator = denominator / gcd;
+            return `${simplifiedNumerator}/${simplifiedDenominator}`;
+        }
+
+        function findGCD(a, b) {
+            return b === 0 ? a : findGCD(b, a % b);
+        }
+
+        function calculateFractionResult() {
+            const fractionInput1 = document.getElementById("fractionInput1").value;
+            const fractionInput2 = document.getElementById("fractionInput2").value;
+
+            const [numerator1, denominator1] = fractionInput1.split('/').map(Number);
+            const [numerator2, denominator2] = fractionInput2.split('/').map(Number);
+
+            if (!isNaN(numerator1) && !isNaN(denominator1) && !isNaN(numerator2) && !isNaN(denominator2)) {
+                const commonDenominator = denominator1 * denominator2;
+                const adjustedNumerator1 = numerator1 * denominator2;
+                const adjustedNumerator2 = (isAddition ? 1 : -1) * numerator2 * denominator1;
+
+                const sumNumerator = adjustedNumerator1 + adjustedNumerator2;
+                const result = simplifyFraction(sumNumerator, commonDenominator);
+
+                document.getElementById("fractionOutput").innerText = result;
+            } else {
+                document.getElementById("fractionOutput").innerText = "Invalid input";
+            }
+        }
+
+        document.getElementById("fractionInput1").addEventListener("input", calculateFractionResult);
+        document.getElementById("fractionInput2").addEventListener("input", calculateFractionResult);
     </script>
-    
     
 </body>
 </html>
